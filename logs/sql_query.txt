@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS Customers (
+    CustomerID REAL,
+    Country TEXT,
+    PRIMARY KEY (CustomerID)
+);
+CREATE TABLE IF NOT EXISTS Raw_Products (
+    StockCode TEXT,
+    Description TEXT,
+    UnitPrice REAL
+);
+CREATE TABLE IF NOT EXISTS Time (
+    InvoiceNo TEXT,
+    InvoiceDate TEXT,
+    Year INTEGER,
+    Month INTEGER,
+    Day INTEGER,
+    PRIMARY KEY (InvoiceNo)
+);
+CREATE TABLE IF NOT EXISTS Orders (
+    InvoiceNo TEXT,
+    CustomerID REAL,
+    StockCode TEXT,
+    Quantity INTEGER,
+    Revenue REAL,
+    PRIMARY KEY (InvoiceNo),
+    FOREIGN KEY (InvoiceNo) REFERENCES Time(InvoiceNo),
+    FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId),
+    FOREIGN KEY (StockCode) REFERENCES Products(StockCode)
+);

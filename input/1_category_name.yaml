@@ -1,0 +1,48 @@
+# --- YAML config for category creation notebook --- #
+
+# Write mapping of cluster IDs to category labels
+# Groups with their descriptions are listed in '/logs/categories.txt'
+category_labels:
+  0: Home Decor & Decorative Accessories
+  1: Gifts, Toys & Novelty Items
+  2: Missing / Undefined Products
+  3: Craft Supplies & Decorative Trims
+  4: Home Decor & Decorative Accessories
+  5: Kitchenware & Home Dining
+  6: Home Decor & Storage Accessories
+  7: Lighting & Candles
+  8: Party Supplies & Disposable Tableware
+  9: Stationery, Cards & Paper Goods
+  10: Fashion Accessories & Personal Items
+  11: Wall Decor & Creative Activities
+  12: Storage, Boxes & Organisers
+  13: Kitchenware & Party Accessories
+  14: Photo Frames, Albums & Paper Goods
+  15: Jewellery & Fashion Accessories
+  16: Kitchenware & Home Dining
+  17: Baking & Cake Decorating
+  18: Kitchenware & Home Dining
+  19: Children’s Gifts & Toys
+  20: Kitchenware & Beverage Accessories
+  21: Clocks & Timepieces
+  22: Home Decor & Garden Decor
+  23: Jewellery & Fashion Accessories
+  24: Seasonal & Christmas Decorations
+  25: Bags, Shoppers & Carry Accessories
+  26: Garden, Floral & Nature-Themed Items
+  27: Home Decor, Wooden Items & Games
+  28: Jewellery & Fashion Accessories
+  29: Stationery, Cards & Paper Goods
+  30: Home Comfort & Bathroom Accessories
+  31: Home Signage & Decorative Signs
+  32: Keyrings & Small Personal Accessories
+  33: Operational / Admin Records (Non-Product) # remove
+  34: Lighting & Candles
+  35: Lighting & Candles
+  36: Home Textiles & Soft Furnishings
+  37: Craft Kits, Stationery & Hobby Items
+  38: Animal-Themed Home & Gift Items
+
+# Categories to be removed from product listings
+invalid_categories:
+  - 33

@@ -1,0 +1,26 @@
+# ---  Directory --- #
+dir:
+    raw_data: "./data/raw/OnlineRetail.xlsx" # 
+    db: "./data/sqliteDB/sales.db" # Folder containing database
+    qout: "./data/queries_out"
+
+
+# --- Define Keys for Database--- #
+
+# Define Primary Keys
+# 'table':['primary_key'] 
+
+primary_keys: 
+    Customers: ['CustomerID']
+    Products: ['StockCode']
+    Time: ['InvoiceNo']
+    Orders: ['InvoiceNo']
+
+
+# Define Foreign Keys
+# 'current_table': {'foreign_key':'referenced_table.referenced_key'}}
+foreign_keys: 
+    Orders: 
+        InvoiceNo: 'Time.InvoiceNo'
+        CustomerId: 'Customers.CustomerId'
+        StockCode: 'Products.StockCode'
