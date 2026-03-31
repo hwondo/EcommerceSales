@@ -4,7 +4,7 @@ Sales Analysis and Dashboard
 
 **Summary** 
 
-This project supports marketing teams providing data driven insights from transactional data. We build models capturing customer behavior, sales trends and customer lifetime value. Key output is a Power BI dashboard that consolidates model insights and tracks additional sales KPI. 
+This project supports marketing teams providing data driven insights from transactional data. We build models capturing customer behavior, sales trends and customer lifetime value. Key output is a Power BI dashboard (screenshots in dashboard folder) that consolidates model insights and tracks additional sales KPI. 
 
 
 **Key Insights**
