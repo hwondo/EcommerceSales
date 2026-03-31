@@ -2,9 +2,18 @@ Sales Analysis and Dashboard
 
 ----------
 
-**Overview** 
+**Summary** 
 
-This project aims to analyse ecommerce sales data with insights delivered through a PowerBI dashboard.  
+This project supports marketing teams providing data driven insights from transactional data. We build models capturing customer behavior, sales trends and customer lifetime value. Key output is a Power BI dashboard that consolidates model insights and tracks additional sales KPI. 
+
+
+**Key Insights**
+- Over half of the customer base (54%) made no more than two purchases, with 35% transacting only once.  Prioritise a post-purchase re-engagement programme targeted at first and second-time buyers.
+- Revenue largely driven by wholesale buyers (mean order value of $430) making up 2.85% of the customer base. 
+- 'Promising' group identified by high frequency and low recency RFM scores with low average order values.  Ideal for up sales through product recommendations (using co-purchases derived from analysis). 
+- Identified customers with greater than 80% probability of purchase in the next 30 days ideal for advertising. 
+- Projected compound monthly growth of 0.14% from start of 2011 year. 
+
 
 **Main Objectives**
 
@@ -13,7 +22,7 @@ This project aims to analyse ecommerce sales data with insights delivered throug
 3. Forecast Sales using a time series model.
 4. Segment customers based on recency, frequency and monetary value scores to identify customer behavior types. 
 5.  Predict future customer lifetime value for customers in the database. 
-6. Create product recommendations based on order copurchases. 
+6. Create product recommendations based on order co-purchases. 
 7. Create a PowerBI dashboard for intuitive reporting of 3-6 above with additional key sales metrics. 
 
 
@@ -23,7 +32,7 @@ To rerun analysis on updated data:
 1. Edit `config.yml` to reconfigure directories and table keys.
 2. Run `create_database.py` to create sqlite database stored in path 'db' in configuration file. SQL query used to create tables saved in logs folder as `sql_query.txt`. 
 3. Run notebook `1_create_categories.ipynb` block by block. This requires inspecting the output saved to logs and modifying inputs yaml files in inputs folder. 
-4. Run notebooks 2a-2d in any order, modify hyperparameters in ARIMA and Kmeans if necessary.  
+4. Run notebooks 2a-2d in any order, modify hyperparameters in time series model and Kmeans if necessary.  
 5. Refresh data in PowerBI. 
 
 ----------

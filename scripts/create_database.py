@@ -117,7 +117,7 @@ def main():
     dfs['Customers'] = create_df(raw_df,customer_cols)
     dfs['Raw_Products'] = create_df(raw_df,product_cols)
     dfs['Time'] = create_time_df(raw_df,time_cols)
-    dfs['Orders'] = calc_revenue(raw_df,order_cols)
+    dfs['Orders'] = create_df(raw_df,order_cols)
     
     # Create SQLite DB and fill tables with data
     insert_data(

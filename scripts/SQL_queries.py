@@ -8,7 +8,7 @@ import yaml
 T = "'2011-12-09'" # Set analysis date (format YYYY-MM-DD)
 
 # Subqueries
-Qsub_Order_Data = """
+Qsub_JoinOrderData = """
     SELECT 
         o.InvoiceNo,
         o.CustomerID,
@@ -16,72 +16,79 @@ Qsub_Order_Data = """
         date(t.InvoiceDate) AS order_date,
         p.CategoryLabel,
         p.Description,
-        o.Revenue
+        o.Quantity,
+        o.UnitPrice,
+        (o.Quantity * o.UnitPrice) AS Revenue,
+        CASE WHEN o.InvoiceNo LIKE 'C%' THEN 1 ELSE 0 END AS is_cancellation
     FROM Orders o
     LEFT JOIN Products p 
         ON o.StockCode = p.StockCode
     LEFT JOIN time t
         ON o.InvoiceNo = t.InvoiceNo
-    WHERE o.Revenue > 0 
-        AND o.InvoiceNo NOT LIKE 'C%'
-        AND p.CategoryLabel IS NOT NULL
+    WHERE p.CategoryLabel IS NOT NULL
+        AND o.CustomerID IS NOT NULL
 """
 
-Qsub_Customer_Agg = f"""
-    SELECT 
-        s.CustomerID,
-        julianday({T}) - julianday(MAX(s.order_date)) AS recency_days,
-        julianday({T}) - julianday(MIN(s.order_date)) AS observation_days,
-        julianday(MAX(s.order_date)) - julianday(MIN(s.order_date)) AS active_days,
-        COUNT(DISTINCT s.InvoiceNo) AS total_orders,
-        SUM(s.Revenue) AS total_purchase      
-    FROM ({Qsub_Order_Data}) s
-    GROUP BY s.CustomerID
-"""
+Qsub_CustomerAgg = f"""
+    SELECT
+        CustomerID,
+        SUM(Revenue)  AS Revenue,
+        COUNT(DISTINCT CASE WHEN is_cancellation = 0 THEN InvoiceNo END) AS Orders,
+        MIN(CASE WHEN is_cancellation = 0 THEN order_date END) AS FirstOrderDate,
+        MAX(CASE WHEN is_cancellation = 0 THEN order_date END) AS LastOrderDate
+    FROM ({Qsub_JoinOrderData})
+    GROUP BY CustomerID
+    HAVING SUM(Revenue) > 0
+    """
 
 # Queries
 Q_Sales = f"""
     SELECT 
         s.InvoiceNo,
+        s.is_cancellation,
         s.order_date,
         s.CustomerID,
         s.StockCode,
-        s.CategoryLabel AS category, 
+        s.CategoryLabel AS category,
         s.Description AS description,
         s.Revenue AS revenue
-    FROM ({Qsub_Order_Data}) s
+    FROM ({Qsub_JoinOrderData}) s
 """
 
 Q_rfm = f"""
     SELECT 
-        c.CustomerID,
-        c.recency_days AS recency,
-        c.total_orders AS frequency,
-        CASE
-            WHEN c.total_orders > 0
-            THEN c.total_purchase / c.total_orders
-            ELSE NULL
-        END AS  monetary_value,
-        c.observation_days AS tenure
-    FROM ({Qsub_Customer_Agg}) c
+        a.CustomerID,
+        julianday({T}) - julianday(a.LastOrderDate) AS recency,
+        a.Orders AS frequency,
+        a.Revenue AS monetary_value,
+        julianday({T}) - julianday(a.FirstOrderDate) AS tenure
+    FROM ({Qsub_CustomerAgg}) a
+    GROUP BY a.CustomerID
     """
     
 Q_clv = f"""
     SELECT
-        c.CustomerID,
-        c.active_days as recency,
-        c.total_orders - 1 AS frequency,
-        c.observation_days AS tenure,
-        c.total_purchase / c.total_orders AS monetary_value
-    FROM ({Qsub_Customer_Agg}) c
-    """
+        a.CustomerID,
+        (julianday(a.LastOrderDate) - julianday(a.FirstOrderDate)) AS recency,
+        a.Orders - 1 AS frequency,
+        julianday({T}) - julianday(a.FirstOrderDate) AS tenure,
+        CASE
+            WHEN a.Orders > 0
+            THEN a.Revenue / a.Orders 
+            ELSE NULL
+        END AS monetary_value       
+    FROM ({Qsub_CustomerAgg}) a
+    GROUP BY a.CustomerID
+"""
+
 
 Q_pr = f"""
     SELECT
         o.InvoiceNo,
         o.CustomerID,
         o.StockCode
-    FROM ({Qsub_Order_Data}) o
+    FROM ({Qsub_JoinOrderData}) o
+    WHERE o.is_cancellation = 0
 """
 
 # --- Main Function --- #   
